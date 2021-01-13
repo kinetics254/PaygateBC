@@ -20,9 +20,9 @@ table 60600 "Paygate Buffer"
             Caption = 'Payment Mode';
             DataClassification = ToBeClassified;
         }
-        field(7; "Transaction Date"; Date)
+        field(7; "Transaction DateTime"; DateTime)
         {
-            Caption = 'Transaction Date';
+            Caption = 'Transaction DateTime';
             DataClassification = ToBeClassified;
         }
         field(13; "Payer ID"; Code[20])
@@ -65,11 +65,19 @@ table 60600 "Paygate Buffer"
         {
             Caption = 'Source Document Type';
             DataClassification = ToBeClassified;
-            OptionMembers = Orders,Invoices,Ledgers,Requests;
+            OptionMembers = " ",Quote,Orders,Invoices,Ledgers,Requests;
         }
         field(37; "Source Document No."; Code[20])
         {
             Caption = 'Source Document No.';
+            DataClassification = ToBeClassified;
+        }
+        field(41; "Applied Entry No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(43; "Bulk Payment"; Boolean)
+        {
             DataClassification = ToBeClassified;
         }
         field(51; "Processed DateTime"; DateTime)
@@ -95,6 +103,11 @@ table 60600 "Paygate Buffer"
         field(57; "Validated DateTime"; DateTime)
         {
             Caption = 'Validated DateTime';
+            DataClassification = ToBeClassified;
+        }
+        field(67; "Has Errors"; Boolean)
+        {
+            Caption = 'Has Errors';
             DataClassification = ToBeClassified;
         }
     }

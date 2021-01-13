@@ -22,7 +22,7 @@ page 60601 "PaymentsAPI"
                     ApplicationArea = All;
                     Caption = 'transactionCode', Locked = true;
                 }
-                field(transactionDate; Rec."Transaction Date")
+                field(transactionDate; Rec."Transaction DateTime")
                 {
                     ApplicationArea = All;
                     Caption = 'transactionDate', Locked = true;
