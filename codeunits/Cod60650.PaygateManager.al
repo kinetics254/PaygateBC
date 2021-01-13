@@ -1,4 +1,4 @@
-codeunit 60600 "Paygate Manager"
+codeunit 60650 "Paygate Manager"
 {
     procedure ImportPayments()
     begin

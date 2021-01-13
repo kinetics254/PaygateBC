@@ -6,7 +6,7 @@ xmlport 60600 "Payments"
         {
             tableelement(PaygateBuffer; "Paygate Buffer")
             {
-                fieldelement(TransactionDate; PaygateBuffer."Transaction Date")
+                fieldelement(TransactionDate; PaygateBuffer."Transaction DateTime")
                 {
                 }
                 fieldelement(EntryNo; PaygateBuffer."Entry No.")

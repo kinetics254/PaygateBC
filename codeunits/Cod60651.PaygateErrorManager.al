@@ -1,4 +1,4 @@
-codeunit 60601 "Paygate Error Manager"
+codeunit 60651 "Paygate Error Manager"
 {
     TableNo = "Paygate Buffer";
 
@@ -39,7 +39,7 @@ codeunit 60601 "Paygate Error Manager"
     begin
         //do inserts here
 
-        CurrEntry.vali
+        //CurrEntry.vali
     end;
 
     var

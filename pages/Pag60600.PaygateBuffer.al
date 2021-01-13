@@ -17,7 +17,7 @@ page 60600 "Paygate Buffer"
                 {
                     ApplicationArea = All;
                 }
-                field("Transaction Date"; Rec."Transaction Date")
+                field("Transaction Date"; Rec."Transaction DateTime")
                 {
                     ApplicationArea = All;
                 }
