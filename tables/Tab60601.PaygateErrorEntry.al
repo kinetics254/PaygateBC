@@ -43,5 +43,27 @@ table 60601 "Paygate Error Entry"
             Clustered = true;
         }
     }
+    trigger OnInsert()
+    begin
+        InitRecord();
+    end;
 
+    local procedure InitRecord()
+    begin
+        if "Entry No." = 0 then
+            "Entry No." := GetNextEntryNo();
+        "Created DateTime" := CurrentDateTime;
+    end;
+
+    local procedure GetNextEntryNo(): Integer
+    var
+        PaygetError: Record "Paygate Error Entry";
+    begin
+        PaygetError.Reset();
+        PaygetError.SetCurrentKey("Entry No.");
+        if PaygetError.FindLast() then
+            exit(PaygetError."Entry No." + 1)
+        else
+            exit(1);
+    end;
 }

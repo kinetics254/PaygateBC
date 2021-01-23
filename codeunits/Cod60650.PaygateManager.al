@@ -10,17 +10,22 @@ codeunit 60650 "Paygate Manager"
 
     end;
 
-    procedure ProcessSingle(AskConf: Boolean; CurrEntry: Record "Paygate Buffer")
+    procedure ProcessSingle(HideDialog: Boolean; var CurrEntry: Record "Paygate Buffer")
     var
-        ConfAskProcess: Label 'Process Buffer Entry ?';
         ErrorHandler: Codeunit "Paygate Error Manager";
     begin
-        if AskConf then
-            if Confirm(ConfAskProcess, false) then exit;
-
+        if not ConfirmProcessBuffer(CurrEntry, HideDialog) then exit;
         if CurrEntry.Status <> CurrEntry.Status::Pending then exit;
         ErrorHandler.Run(CurrEntry);
         if not CurrEntry.Validated then exit;
+    end;
+
+    local procedure ConfirmProcessBuffer(CurrEntry: Record "Paygate Buffer"; HideDialog: Boolean): Boolean
+    var
+        ConfirmQst: label 'Process Buffer Entry?';
+    begin
+        if not GuiAllowed or HideDialog then exit(true);
+        exit(Confirm(ConfirmQst, false));
     end;
 
     procedure ValidateEntry(CurrEntry: Record "Paygate Buffer")
@@ -30,9 +35,9 @@ codeunit 60650 "Paygate Manager"
 
     end;
 
-    procedure GetSourceDocument()
+    procedure GetSourceDocument(var PaymentBuffer: Record "Paygate Buffer")
     begin
-
+        OnAfterGetSourceDocument(PaymentBuffer);
     end;
 
     procedure CreateReceipt()
@@ -43,5 +48,10 @@ codeunit 60650 "Paygate Manager"
     procedure PostReceipt()
     begin
 
+    end;
+
+    [IntegrationEvent(true, false)]
+    local procedure OnAfterGetSourceDocument(var PaymentBuffer: Record "Paygate Buffer")
+    begin
     end;
 }

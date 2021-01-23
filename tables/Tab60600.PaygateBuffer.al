@@ -93,7 +93,9 @@ table 60600 "Paygate Buffer"
         field(61; Errors; Integer)
         {
             Caption = 'Errors';
-            DataClassification = ToBeClassified;
+            FieldClass = FlowField;
+            CalcFormula = count("Paygate Error Entry" where("Source Entry No." = field("Entry No.")));
+            Editable = false;
         }
         field(55; Validated; Boolean)
         {
@@ -110,6 +112,7 @@ table 60600 "Paygate Buffer"
             Caption = 'Has Errors';
             DataClassification = ToBeClassified;
         }
+
     }
     keys
     {
@@ -118,5 +121,26 @@ table 60600 "Paygate Buffer"
             Clustered = true;
         }
     }
+    trigger OnInsert()
+    begin
+        InitRecord();
+    end;
 
+    local procedure InitRecord()
+    begin
+        if "Entry No." = 0 then
+            "Entry No." := GetNextEntryNo()
+    end;
+
+    local procedure GetNextEntryNo(): Integer
+    var
+        PaygetBuffer: Record "Paygate Buffer";
+    begin
+        PaygetBuffer.Reset();
+        PaygetBuffer.SetCurrentKey("Entry No.");
+        if PaygetBuffer.FindLast() then
+            exit(PaygetBuffer."Entry No." + 1)
+        else
+            exit(1);
+    end;
 }
