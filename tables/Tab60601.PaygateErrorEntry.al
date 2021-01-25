@@ -2,7 +2,8 @@ table 60601 "Paygate Error Entry"
 {
     Caption = 'Paygate Error Entry';
     DataClassification = ToBeClassified;
-
+    LookupPageId = "Error Log";
+    DrillDownPageId = "Error Log";
     fields
     {
         field(1; "Entry No."; Integer)

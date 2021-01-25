@@ -2,34 +2,100 @@ codeunit 60651 "Paygate Error Manager"
 {
     TableNo = "Paygate Buffer";
 
+    var
+        ERROREXISTS: Boolean;
+        ERRORCODE: Code[20];
+        ERRORTXT: Text[250];
+        ERRORRECS: Record "Paygate Error Entry";
+
+        CLE: Record "Cust. Ledger Entry";
+        CustApply: Codeunit "CustEntry-Apply Posted Entries";
+        PaygateBuffer: Record "Paygate Buffer";
+        IsHandled: Boolean;
+
     trigger OnRun()
     begin
         PaygateBuffer := Rec;
         ClearVars(PaygateBuffer);
         CheckForMandatory(PaygateBuffer);
-
         //check if the dates of payment are current
-
         //check payment method aspects
-
+        OnBeforeCheckSourceDocumentExists(PaygateBuffer, IsHandled);
         //check the source document exists unless it is a bulk payment
-
+        CheckSourceDocumentExist(PaygateBuffer, IsHandled);
+        OnAfterCheckSourceDocumentExists(PaygateBuffer);
+        IsHandled := false;
+        OnBeforeCheckSourceAmountTally(PaygateBuffer, IsHandled);
+        CheckSourceAmountTally(PaygateBuffer, IsHandled);
+        OnAfterCheckSourceAmountTally(PaygateBuffer);
         //Check if amounts tally with source document unless it is a bulk payment
-
-        if ERROREXISTS then begin
-            //    CreateErrorEntry(Rec);
-        end;
+        //if ERROREXISTS then begin
+        //    CreateErrorEntry(Rec);
+        //end;
         PaygateBuffer.CalcFields(Errors);
         PaygateBuffer."Has Errors" := PaygateBuffer.Errors > 0;
         PaygateBuffer.Validated := not PaygateBuffer."Has Errors";
         if PaygateBuffer.Validated then
             PaygateBuffer."Validated DateTime" := CurrentDateTime;
-        PaygateBuffer.Modify(true);
+        if PaygateBuffer.Modify(true) then;
+        OnAfterValidatePayment(PaygateBuffer);
     end;
 
-    local procedure CheckForMandatory(var CurrEntry: Record "Paygate Buffer")
+    local procedure CheckSourceDocumentExist(CurrEntry: Record "Paygate Buffer"; Ishadled: Boolean)
+    var
+        SalesHeader: Record "Sales Header";
+    begin
+        if Ishadled then
+            exit;
+        case CurrEntry."Source Document Type" of
+            CurrEntry."Source Document Type"::Invoices:
+                if not SalesHeader.Get(SalesHeader."Document Type"::Invoice, PaygateBuffer."Source Document No.") then
+                    CreateErrorEntry(CurrEntry, 'MISSSOURCDOC', 'Source Document is Missing');
+            CurrEntry."Source Document Type"::Orders:
+                if not SalesHeader.Get(SalesHeader."Document Type"::Order, PaygateBuffer."Source Document No.") then
+                    CreateErrorEntry(CurrEntry, 'MISSSOURCDOC', 'Source Document is Missing');
+            CurrEntry."Source Document Type"::Quote:
+                if not SalesHeader.Get(SalesHeader."Document Type"::Quote, PaygateBuffer."Source Document No.") then
+                    CreateErrorEntry(CurrEntry, 'MISSSOURCDOC', 'Source Document is Missing');
+        end;
+    end;
+
+    local procedure CheckSourceAmountTally(CurrEntry: Record "Paygate Buffer"; Ishadled: Boolean)
+    var
+        SalesHeader: Record "Sales Header";
+    begin
+        if Ishadled then
+            exit;
+        if CurrEntry."Bulk Payment" then
+            exit;
+        case CurrEntry."Source Document Type" of
+            CurrEntry."Source Document Type"::Invoices:
+                if SalesHeader.Get(SalesHeader."Document Type"::Invoice, PaygateBuffer."Source Document No.") then begin
+                    SalesHeader.CalcFields("Amount Including VAT");
+                    if (PaygateBuffer.Amount - SalesHeader."Amount Including VAT") > 1 then
+                        CreateErrorEntry(CurrEntry, 'MISSAMT', 'Miss-Match of source amt vs amount paid');
+                end;
+
+            CurrEntry."Source Document Type"::Orders:
+                if SalesHeader.Get(SalesHeader."Document Type"::Order, PaygateBuffer."Source Document No.") then begin
+                    SalesHeader.CalcFields("Amount Including VAT");
+                    if (PaygateBuffer.Amount - SalesHeader."Amount Including VAT") > 1 then
+                        CreateErrorEntry(CurrEntry, 'MISSAMT', 'Miss-Match of source amt vs amount paid');
+                end;
+
+            CurrEntry."Source Document Type"::Quote:
+                if SalesHeader.Get(SalesHeader."Document Type"::Quote, PaygateBuffer."Source Document No.") then begin
+                    SalesHeader.CalcFields("Amount Including VAT");
+                    if (PaygateBuffer.Amount - SalesHeader."Amount Including VAT") > 1 then
+                        CreateErrorEntry(CurrEntry, 'MISSAMT', 'Miss-Match of source amt vs amount paid');
+                end;
+        end;
+    end;
+
+    local procedure CheckForMandatory(CurrEntry: Record "Paygate Buffer")
     var
         PaymentMethod: Record "Payment Method";
+        Customer: Record Customer;
     begin
         if (CurrEntry."Transaction Code" = '') or (CurrEntry."Transaction Code" = '0') then
             CreateErrorEntry(CurrEntry, 'MISSTRANSCODE', 'Missing Transaction Code');
@@ -39,11 +105,13 @@ codeunit 60651 "Paygate Error Manager"
             CreateErrorEntry(CurrEntry, 'MISSINTRANSDATE', 'Missing Transaction Date');
         if CurrEntry.Amount = 0 then
             CreateErrorEntry(CurrEntry, 'ZEROAMT', 'Zero Amount');
+        if CurrEntry."Source Document Type" in [CurrEntry."Source Document Type"::" "] then
+            CreateErrorEntry(CurrEntry, 'MISSDOCTYPE', 'Missing Source Document Type');
         if CurrEntry."Source Document No." = '' then
             CreateErrorEntry(CurrEntry, 'MISSINDOCNO', 'Missing Source Document No.');
         if CurrEntry."Payer ID" = '' then
             CreateErrorEntry(CurrEntry, 'MISSPAYERID', 'Missing payer id');
-        if CurrEntry."Customer No." = '' then
+        if (CurrEntry."Customer No." = '') or not (Customer.Get(CurrEntry."Customer No.")) then
             CreateErrorEntry(CurrEntry, 'MISSCUSTNO', 'Missing Customer No.');
 
     end;
@@ -51,7 +119,7 @@ codeunit 60651 "Paygate Error Manager"
     procedure ClearVars(CurrEntry: Record "Paygate Buffer")
     begin
         ERROREXISTS := false;
-
+        IsHandled := false;
         ERRORRECS.RESET;
         ERRORRECS.SETFILTER("Source Entry No.", '%1', CurrEntry."Entry No.");
         IF ERRORRECS.FINDSET THEN
@@ -71,14 +139,39 @@ codeunit 60651 "Paygate Error Manager"
         PayGateError.Insert(true);
     end;
 
-    var
-        ERROREXISTS: Boolean;
-        ERRORCODE: Code[20];
-        ERRORTXT: Text[250];
-        ERRORRECS: Record "Paygate Error Entry";
+    [IntegrationEvent(true, false)]
+    procedure OnBeforeCheckSourceDocumentExists(var PayGateEntry: Record "Paygate Buffer"; var Ishandled: Boolean)
 
-        CLE: Record "Cust. Ledger Entry";
-        CustApply: Codeunit "CustEntry-Apply Posted Entries";
-        PaygateBuffer: Record "Paygate Buffer";
+    begin
+
+    end;
+
+    [IntegrationEvent(true, false)]
+    procedure OnAfterCheckSourceDocumentExists(var PayGateEntry: Record "Paygate Buffer")
+
+    begin
+
+    end;
+
+    [IntegrationEvent(true, false)]
+    procedure OnBeforeCheckSourceAmountTally(var PayGateEntry: Record "Paygate Buffer"; var Ishandled: Boolean)
+
+    begin
+
+    end;
+
+    [IntegrationEvent(true, false)]
+    procedure OnAfterCheckSourceAmountTally(var PayGateEntry: Record "Paygate Buffer")
+
+    begin
+
+    end;
+
+    [IntegrationEvent(true, false)]
+    procedure OnAfterValidatePayment(var PayGateEntry: Record "Paygate Buffer")
+
+    begin
+
+    end;
 }
 

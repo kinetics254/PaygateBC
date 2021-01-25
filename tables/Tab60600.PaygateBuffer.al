@@ -112,6 +112,10 @@ table 60600 "Paygate Buffer"
             Caption = 'Has Errors';
             DataClassification = ToBeClassified;
         }
+        field(68; "Processed Receipt No"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
     keys

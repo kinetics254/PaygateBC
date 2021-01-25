@@ -35,11 +35,6 @@ codeunit 60650 "Paygate Manager"
 
     end;
 
-    procedure GetSourceDocument(var PaymentBuffer: Record "Paygate Buffer")
-    begin
-        OnAfterGetSourceDocument(PaymentBuffer);
-    end;
-
     procedure CreateReceipt()
     begin
 
@@ -50,8 +45,11 @@ codeunit 60650 "Paygate Manager"
 
     end;
 
-    [IntegrationEvent(true, false)]
-    local procedure OnAfterGetSourceDocument(var PaymentBuffer: Record "Paygate Buffer")
+    [EventSubscriber(ObjectType::Table, Database::"Paygate Buffer", 'OnAfterInsertEvent', '', false, false)]
+    local procedure ValidateOnAfterInsert(var Rec: Record "Paygate Buffer")
+    var
+        ErrorHandler: Codeunit "Paygate Error Manager";
     begin
+        //ErrorHandler.Run(Rec);
     end;
 }
