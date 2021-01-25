@@ -138,6 +138,11 @@ page 60600 "Paygate Buffer"
         ShowRecStatus();
     end;
 
+    trigger OnAfterGetCurrRecord()
+    begin
+        ShowRecStatus();
+    end;
+
     var
         RecHasErrors: Text[20];
 

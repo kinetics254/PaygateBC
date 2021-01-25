@@ -125,6 +125,9 @@ table 60600 "Paygate Buffer"
             Clustered = true;
         }
     }
+    var
+        ErrorHandler: Codeunit "Paygate Error Manager";
+
     trigger OnInsert()
     begin
         InitRecord();

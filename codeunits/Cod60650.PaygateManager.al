@@ -50,6 +50,6 @@ codeunit 60650 "Paygate Manager"
     var
         ErrorHandler: Codeunit "Paygate Error Manager";
     begin
-        //ErrorHandler.Run(Rec);
+        ErrorHandler.Run(Rec);
     end;
 }
