@@ -32,13 +32,19 @@ codeunit 60651 "Paygate Error Manager"
         //if ERROREXISTS then begin
         //    CreateErrorEntry(Rec);
         //end;
-        PaygateBuffer.CalcFields(Errors);
-        PaygateBuffer."Has Errors" := PaygateBuffer.Errors > 0;
-        PaygateBuffer.Validated := not PaygateBuffer."Has Errors";
-        if PaygateBuffer.Validated then
-            PaygateBuffer."Validated DateTime" := CurrentDateTime;
-        if PaygateBuffer.Modify(true) then;
+        UpdateBufferRecord(PaygateBuffer);
         OnAfterValidatePayment(PaygateBuffer);
+    end;
+
+    local procedure UpdateBufferRecord(var CurrEntry: Record "Paygate Buffer")
+
+    begin
+        CurrEntry.CalcFields(Errors);
+        CurrEntry."Has Errors" := CurrEntry.Errors > 0;
+        CurrEntry.Validated := not CurrEntry."Has Errors";
+        if CurrEntry.Validated then
+            CurrEntry."Validated DateTime" := CurrentDateTime;
+        if CurrEntry.Modify(true) then;
     end;
 
     local procedure CheckSourceDocumentExist(CurrEntry: Record "Paygate Buffer"; Ishadled: Boolean)
