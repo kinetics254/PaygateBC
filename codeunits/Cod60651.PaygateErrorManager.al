@@ -107,6 +107,13 @@ codeunit 60651 "Paygate Error Manager"
             CreateErrorEntry(CurrEntry, 'MISSTRANSCODE', 'Missing Transaction Code');
         if (CurrEntry."Payment Mode" = '') or not (PaymentMethod.Get(CurrEntry."Payment Mode")) then
             CreateErrorEntry(CurrEntry, 'MISSINPAYMETH', 'Missing Payment method or Payment Method not set');
+        if PaymentMethod.Get(CurrEntry."Payment Mode") then begin
+            if not (PaymentMethod."Bal. Account Type" in [PaymentMethod."Bal. Account Type"::"Bank Account"]) then
+                CreateErrorEntry(CurrEntry, 'MISSINPAYMETHSET', 'Payment method Bal Acc Not Setup');
+            if PaymentMethod."Bal. Account No." = '' then
+                CreateErrorEntry(CurrEntry, 'PAYMETHMISSBAL', 'Payment Method Missing Balacing Acc No.s');
+        end;
+
         if CurrEntry."Transaction DateTime" = 0DT then
             CreateErrorEntry(CurrEntry, 'MISSINTRANSDATE', 'Missing Transaction Date');
         if CurrEntry.Amount = 0 then
