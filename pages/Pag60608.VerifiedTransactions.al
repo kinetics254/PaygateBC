@@ -1,10 +1,10 @@
-page 60600 "Paygate Buffer"
+page 60608 "Verified Transactions"
 {
 
     ApplicationArea = All;
-    Caption = 'Paygate Buffer';
+    Caption = 'All Transaction Buffer';
     PageType = List;
-    SourceTable = "Paygate Buffer";
+    SourceTable = "PayGate Buffer";
     UsageCategory = Lists;
 
     layout

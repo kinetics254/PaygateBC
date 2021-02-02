@@ -1,9 +1,9 @@
-page 60602 "Paygate Fact Box"
+page 60602 "PayGate Fact Box"
 {
 
-    Caption = 'Paygate Fact Box';
+    Caption = 'PayGate Fact Box';
     PageType = CardPart;
-    SourceTable = "Paygate Buffer";
+    SourceTable = "PayGate Buffer";
     DeleteAllowed = false;
     InsertAllowed = false;
     ModifyAllowed = false;
