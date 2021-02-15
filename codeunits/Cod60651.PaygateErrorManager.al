@@ -7,7 +7,6 @@ codeunit 60651 "Paygate Error Manager"
         ERRORCODE: Code[20];
         ERRORTXT: Text[250];
         ERRORRECS: Record "Paygate Error Entry";
-
         CLE: Record "Cust. Ledger Entry";
         CustApply: Codeunit "CustEntry-Apply Posted Entries";
         PaygateBuffer: Record "Paygate Buffer";
@@ -50,12 +49,16 @@ codeunit 60651 "Paygate Error Manager"
     local procedure CheckSourceDocumentExist(CurrEntry: Record "Paygate Buffer"; Ishadled: Boolean)
     var
         SalesHeader: Record "Sales Header";
+        PostedSalesInv: Record "Sales Invoice Header";
     begin
         if Ishadled then
             exit;
         case CurrEntry."Source Document Type" of
             CurrEntry."Source Document Type"::Invoices:
-                if not SalesHeader.Get(SalesHeader."Document Type"::Invoice, PaygateBuffer."Source Document No.") then
+                if not SalesHeader.Get(SalesHeader."Document Type"::Invoice, PaygateBuffer."Source Document No.")
+                    and
+                    not PostedSalesInv.Get(PaygateBuffer."Source Document No.")
+                then
                     CreateErrorEntry(CurrEntry, 'MISSSOURCDOC', 'Source Document is Missing');
             CurrEntry."Source Document Type"::Orders:
                 if not SalesHeader.Get(SalesHeader."Document Type"::Order, PaygateBuffer."Source Document No.") then
