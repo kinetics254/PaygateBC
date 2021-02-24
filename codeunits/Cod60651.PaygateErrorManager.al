@@ -121,12 +121,12 @@ codeunit 60651 "Paygate Error Manager"
             CreateErrorEntry(CurrEntry, 'MISSINTRANSDATE', 'Missing Transaction Date');
         if CurrEntry.Amount = 0 then
             CreateErrorEntry(CurrEntry, 'ZEROAMT', 'Zero Amount');
-        if CurrEntry."Source Document Type" in [CurrEntry."Source Document Type"::" "] then
-            CreateErrorEntry(CurrEntry, 'MISSDOCTYPE', 'Missing Source Document Type');
+        // if CurrEntry."Source Document Type" in [CurrEntry."Source Document Type"::" "] then
+        //    CreateErrorEntry(CurrEntry, 'MISSDOCTYPE', 'Missing Source Document Type');
         if CurrEntry."Source Document No." = '' then
             CreateErrorEntry(CurrEntry, 'MISSINDOCNO', 'Missing Source Document No.');
-        if CurrEntry."Payer ID" = '' then
-            CreateErrorEntry(CurrEntry, 'MISSPAYERID', 'Missing payer id');
+        //if CurrEntry."Payer ID" = '' then
+        //    CreateErrorEntry(CurrEntry, 'MISSPAYERID', 'Missing payer id');
         if (CurrEntry."Customer No." = '') or not (Customer.Get(CurrEntry."Customer No.")) then
             CreateErrorEntry(CurrEntry, 'MISSCUSTNO', 'Missing Customer No.');
 
