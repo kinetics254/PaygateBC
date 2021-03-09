@@ -124,13 +124,23 @@ page 60600 "Paygate Buffer"
                 PromotedIsBig = true;
                 Image = ValidateEmailLoggingSetup;
                 trigger OnAction()
-                var
-                    PaygateMgt: Codeunit "Paygate Manager";
                 begin
                     PaygateMgt.ProcessSingle(false, Rec);
                 end;
             }
-
+            action("Validate All")
+            {
+                ApplicationArea = Basic, Suite;
+                Caption = 'Validate All';
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                Image = Approvals;
+                trigger OnAction()
+                begin
+                    ValidateAll();
+                end;
+            }
         }
     }
     trigger OnAfterGetRecord()
@@ -145,6 +155,8 @@ page 60600 "Paygate Buffer"
 
     var
         RecHasErrors: Text[20];
+        PaygateMgt: Codeunit "Paygate Manager";
+
 
     local procedure ShowRecStatus()
 

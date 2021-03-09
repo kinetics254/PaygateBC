@@ -1,30 +1,46 @@
 codeunit 60650 "Paygate Manager"
 {
+    SingleInstance = true;
+
+    var
+        ErrorHandler: Codeunit "Paygate Error Manager";
+
     procedure ImportPayments()
     begin
 
     end;
 
-    procedure ProcessAll()
+    procedure ProcessAll(HideDialog: Boolean)
+    var
+        PayGate: Record "Paygate Buffer";
     begin
-
+        if not ConfirmProcessBuffer(HideDialog) then
+            exit;
+        PayGate.Reset();
+        PayGate.SetFilter(Status, '%1', PayGate.Status::Pending);
+        if PayGate.FindSet(true, false) then
+            repeat
+                Clear(ErrorHandler);
+                ErrorHandler.Run(PayGate);
+            until PayGate.Next() = 0;
     end;
 
     procedure ProcessSingle(HideDialog: Boolean; var CurrEntry: Record "Paygate Buffer")
-    var
-        ErrorHandler: Codeunit "Paygate Error Manager";
+
     begin
-        if not ConfirmProcessBuffer(CurrEntry, HideDialog) then exit;
+        if not ConfirmProcessBuffer(HideDialog) then
+            exit;
         if CurrEntry.Status <> CurrEntry.Status::Pending then exit;
         ErrorHandler.Run(CurrEntry);
         if not CurrEntry.Validated then exit;
     end;
 
-    local procedure ConfirmProcessBuffer(CurrEntry: Record "Paygate Buffer"; HideDialog: Boolean): Boolean
+    local procedure ConfirmProcessBuffer(HideDialog: Boolean): Boolean
     var
         ConfirmQst: label 'Process Buffer Entry?';
     begin
-        if not GuiAllowed or HideDialog then exit(true);
+        if not GuiAllowed or HideDialog then
+            exit(true);
         exit(Confirm(ConfirmQst, false));
     end;
 

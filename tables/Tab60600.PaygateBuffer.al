@@ -150,4 +150,11 @@ table 60600 "Paygate Buffer"
         else
             exit(1);
     end;
+
+    procedure ValidateAll()
+    var
+        PaygateMgt: Codeunit "Paygate Manager";
+    begin
+        PaygateMgt.ProcessAll(false);
+    end;
 }
