@@ -67,7 +67,7 @@ table 60600 "Paygate Buffer"
             DataClassification = ToBeClassified;
             OptionMembers = " ",Quote,Orders,Invoices,Ledgers,Requests;
         }
-        field(37; "Source Document No."; Code[20])
+        field(37; "Source Document No."; Code[35])
         {
             Caption = 'Source Document No.';
             DataClassification = ToBeClassified;
@@ -89,6 +89,7 @@ table 60600 "Paygate Buffer"
         {
             Caption = 'Customer No.';
             DataClassification = ToBeClassified;
+            TableRelation = Customer."No.";
         }
         field(61; Errors; Integer)
         {

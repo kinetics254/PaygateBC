@@ -16,6 +16,7 @@ codeunit 60651 "Paygate Error Manager"
     begin
         PaygateBuffer := Rec;
         ClearVars(PaygateBuffer);
+        OnBeforeCheckForMandatory(PaygateBuffer);
         CheckForMandatory(PaygateBuffer);
         //check if the dates of payment are current
         //check payment method aspects
@@ -157,6 +158,13 @@ codeunit 60651 "Paygate Error Manager"
 
     [IntegrationEvent(true, false)]
     procedure OnBeforeCheckSourceDocumentExists(var PayGateEntry: Record "Paygate Buffer"; var Ishandled: Boolean)
+
+    begin
+
+    end;
+
+    [IntegrationEvent(true, false)]
+    procedure OnBeforeCheckForMandatory(var PaygateBuffer: Record "Paygate Buffer")
 
     begin
 
