@@ -54,7 +54,8 @@ table 60600 "Paygate Buffer"
         {
             Caption = 'Status';
             DataClassification = ToBeClassified;
-            OptionMembers = Pending,Valid,Failed,Processed;
+            OptionMembers = Pending,Valid,Failed,Processed,Partial;
+            OptionCaption = 'Pending,Valid,Failed,Processed,Partial';
         }
         field(21; "DateTime Created"; DateTime)
         {
@@ -116,6 +117,34 @@ table 60600 "Paygate Buffer"
         field(68; "Processed Receipt No"; Code[20])
         {
             DataClassification = ToBeClassified;
+        }
+        field(100; "Amount To Post"; Decimal)
+        {
+            Caption = 'Amount To Post';
+            DataClassification = ToBeClassified;
+            MinValue = 0;
+            trigger OnValidate()
+            var
+                ExcessAmt: Label '%1 cannot be more than %2';
+            begin
+                "Original Amount" := Amount;
+                if "Amount To Post" > Amount then
+                    Error(ExcessAmt, FieldCaption("Amount To Post"), FieldCaption(Amount));
+                if "Amount To Post" > (Amount - "Amount Posted") then
+                    Error(ExcessAmt, FieldCaption("Amount To Post"), FieldCaption("Amount Posted"));
+            end;
+        }
+        field(101; "Amount Posted"; Decimal)
+        {
+            Caption = 'Amount posted';
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(102; "Original Amount"; Decimal)
+        {
+            Caption = 'Original Amount';
+            DataClassification = ToBeClassified;
+            Editable = false;
         }
 
     }

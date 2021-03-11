@@ -22,6 +22,11 @@ page 60600 "Paygate Buffer"
                     ApplicationArea = All;
                     StyleExpr = RecHasErrors;
                 }
+                field(Description; Rec.Description)
+                {
+                    ApplicationArea = All;
+                    StyleExpr = RecHasErrors;
+                }
                 field("Payer ID"; Rec."Payer ID")
                 {
                     ApplicationArea = All;
@@ -32,27 +37,7 @@ page 60600 "Paygate Buffer"
                     ApplicationArea = All;
                     StyleExpr = RecHasErrors;
                 }
-                field(Amount; Rec.Amount)
-                {
-                    ApplicationArea = All;
-                    StyleExpr = RecHasErrors;
-                }
-                field(Description; Rec.Description)
-                {
-                    ApplicationArea = All;
-                    StyleExpr = RecHasErrors;
-                }
                 field("Payment Mode"; Rec."Payment Mode")
-                {
-                    ApplicationArea = All;
-                    StyleExpr = RecHasErrors;
-                }
-                field("Source Document No."; Rec."Source Document No.")
-                {
-                    ApplicationArea = All;
-                    StyleExpr = RecHasErrors;
-                }
-                field("Source Document Type"; Rec."Source Document Type")
                 {
                     ApplicationArea = All;
                     StyleExpr = RecHasErrors;
@@ -62,15 +47,32 @@ page 60600 "Paygate Buffer"
                     ApplicationArea = All;
                     StyleExpr = RecHasErrors;
                 }
-                field("Account No."; Rec."Account No.")
+                field("Source Document No."; Rec."Source Document No.")
                 {
                     ApplicationArea = All;
                     StyleExpr = RecHasErrors;
+                }
+                field(Amount; Rec.Amount)
+                {
+                    ApplicationArea = All;
+                    StyleExpr = RecHasErrors;
+                }
+
+                field("Amount To Post"; Rec."Amount To Post")
+                {
+                    ApplicationArea = Basic, Suite;
                 }
                 field("Customer No."; Rec."Customer No.")
                 {
                     ApplicationArea = All;
                 }
+
+                field("Account No."; Rec."Account No.")
+                {
+                    ApplicationArea = All;
+                    StyleExpr = RecHasErrors;
+                }
+
                 field(Status; Rec.Status)
                 {
                     ApplicationArea = All;
@@ -98,6 +100,15 @@ page 60600 "Paygate Buffer"
                 field("Processed Receipt No"; "Processed Receipt No")
                 {
                     ApplicationArea = Basic, Suite;
+                }
+                field("Amount Posted"; Rec."Amount Posted")
+                {
+                    ApplicationArea = Basic, Suite;
+                }
+                field("Source Document Type"; Rec."Source Document Type")
+                {
+                    ApplicationArea = All;
+                    StyleExpr = RecHasErrors;
                 }
 
             }

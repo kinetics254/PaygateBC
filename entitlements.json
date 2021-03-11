@@ -1,0 +1,76 @@
+﻿{
+  "MembershipEntitlements": [
+    {
+      "Id": "5e4e4858-debf-4c17-bb90-435732834cd2",
+      "SetId": "PayGate",
+      "EntitlementType": 0
+    }
+  ],
+  "EntitlementSets": [
+    {
+      "SetId": "PayGate",
+      "Entitlements": [
+        {
+          "ObjectType": 0,
+          "ObjectIdRangeStart": 60600,
+          "ObjectIdRangeEnd": 60601,
+          "Read": 1,
+          "Insert": 1,
+          "Modify": 1,
+          "Delete": 1,
+          "Execute": 0
+        },
+        {
+          "ObjectType": 1,
+          "ObjectIdRangeStart": 60600,
+          "ObjectIdRangeEnd": 60601,
+          "Read": 0,
+          "Insert": 0,
+          "Modify": 0,
+          "Delete": 0,
+          "Execute": 1
+        },
+        {
+          "ObjectType": 3,
+          "ObjectIdRangeStart": 60600,
+          "ObjectIdRangeEnd": 60600,
+          "Read": 0,
+          "Insert": 0,
+          "Modify": 0,
+          "Delete": 0,
+          "Execute": 1
+        },
+        {
+          "ObjectType": 5,
+          "ObjectIdRangeStart": 60650,
+          "ObjectIdRangeEnd": 60651,
+          "Read": 0,
+          "Insert": 0,
+          "Modify": 0,
+          "Delete": 0,
+          "Execute": 1
+        },
+        {
+          "ObjectType": 6,
+          "ObjectIdRangeStart": 60600,
+          "ObjectIdRangeEnd": 60600,
+          "Read": 0,
+          "Insert": 0,
+          "Modify": 0,
+          "Delete": 0,
+          "Execute": 1
+        },
+        {
+          "ObjectType": 8,
+          "ObjectIdRangeStart": 60600,
+          "ObjectIdRangeEnd": 60603,
+          "Read": 0,
+          "Insert": 0,
+          "Modify": 0,
+          "Delete": 0,
+          "Execute": 1
+        }
+      ]
+    }
+  ]
+}
