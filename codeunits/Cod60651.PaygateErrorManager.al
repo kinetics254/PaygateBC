@@ -18,8 +18,6 @@ codeunit 60651 "Paygate Error Manager"
         ClearVars(PaygateBuffer);
         OnBeforeCheckForMandatory(PaygateBuffer);
         CheckForMandatory(PaygateBuffer);
-        //check if the dates of payment are current
-        //check payment method aspects
         OnBeforeCheckSourceDocumentExists(PaygateBuffer, IsHandled);
         //check the source document exists unless it is a bulk payment
         CheckSourceDocumentExist(PaygateBuffer, IsHandled);
@@ -107,6 +105,7 @@ codeunit 60651 "Paygate Error Manager"
     var
         PaymentMethod: Record "Payment Method";
         Customer: Record Customer;
+        GenCheck: Codeunit "Gen. Jnl.-Check Line";
     begin
         if (CurrEntry."Transaction Code" = '') or (CurrEntry."Transaction Code" = '0') then
             CreateErrorEntry(CurrEntry, 'MISSTRANSCODE', 'Missing Transaction Code');
@@ -116,7 +115,7 @@ codeunit 60651 "Paygate Error Manager"
             if not (PaymentMethod."Bal. Account Type" in [PaymentMethod."Bal. Account Type"::"Bank Account"]) then
                 CreateErrorEntry(CurrEntry, 'MISSINPAYMETHSET', 'Payment method Bal Acc Not Setup');
             if PaymentMethod."Bal. Account No." = '' then
-                CreateErrorEntry(CurrEntry, 'PAYMETHMISSBAL', 'Payment Method Missing Balacing Acc No.s');
+                CreateErrorEntry(CurrEntry, 'PAYMETHMISSBAL', 'Payment Method Missing Balacing Acc No.');
         end;
 
         if CurrEntry."Transaction DateTime" = 0DT then
@@ -127,7 +126,11 @@ codeunit 60651 "Paygate Error Manager"
             CreateErrorEntry(CurrEntry, 'MISSINDOCNO', 'Missing Source Document No.');
         if (CurrEntry."Customer No." = '') or not (Customer.Get(CurrEntry."Customer No.")) then
             CreateErrorEntry(CurrEntry, 'MISSCUSTNO', 'Missing Customer No.');
-
+        if Customer.Get(CurrEntry."Customer No.") then
+            if not (Customer.Blocked in [Customer.Blocked::" "]) then
+                CreateErrorEntry(CurrEntry, 'CUSTBLOC', 'Customer Is Blocked');
+        if GenCheck.DateNotAllowed(DT2Date(CurrEntry."Transaction DateTime")) then
+            CreateErrorEntry(CurrEntry, 'POSTDATE', 'Posting Date not withing allowed posting');
     end;
 
     procedure ClearVars(CurrEntry: Record "Paygate Buffer")

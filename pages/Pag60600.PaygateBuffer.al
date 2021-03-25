@@ -110,6 +110,10 @@ page 60600 "Paygate Buffer"
                     ApplicationArea = All;
                     StyleExpr = RecHasErrors;
                 }
+                field("Created Time"; Rec."Created Time")
+                {
+                    ApplicationArea = Basic, Suite;
+                }
 
             }
         }

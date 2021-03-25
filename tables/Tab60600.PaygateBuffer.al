@@ -92,13 +92,7 @@ table 60600 "Paygate Buffer"
             DataClassification = ToBeClassified;
             TableRelation = Customer."No.";
         }
-        field(61; Errors; Integer)
-        {
-            Caption = 'Errors';
-            FieldClass = FlowField;
-            CalcFormula = count("Paygate Error Entry" where("Source Entry No." = field("Entry No.")));
-            Editable = false;
-        }
+
         field(55; Validated; Boolean)
         {
             Caption = 'Validated';
@@ -108,6 +102,14 @@ table 60600 "Paygate Buffer"
         {
             Caption = 'Validated DateTime';
             DataClassification = ToBeClassified;
+        }
+
+        field(61; Errors; Integer)
+        {
+            Caption = 'Errors';
+            FieldClass = FlowField;
+            CalcFormula = count("Paygate Error Entry" where("Source Entry No." = field("Entry No.")));
+            Editable = false;
         }
         field(67; "Has Errors"; Boolean)
         {
@@ -146,7 +148,11 @@ table 60600 "Paygate Buffer"
             DataClassification = ToBeClassified;
             Editable = false;
         }
-
+        field(200; "Created Time"; DateTime)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
     }
     keys
     {
@@ -166,7 +172,8 @@ table 60600 "Paygate Buffer"
     local procedure InitRecord()
     begin
         if "Entry No." = 0 then
-            "Entry No." := GetNextEntryNo()
+            "Entry No." := GetNextEntryNo();
+        "Created Time" := CurrentDateTime;
     end;
 
     local procedure GetNextEntryNo(): Integer
