@@ -10,7 +10,7 @@ table 60600 "Paygate Buffer"
             Caption = 'Entry No.';
             DataClassification = ToBeClassified;
         }
-        field(3; "Transaction Code"; Code[20])
+        field(3; "Transaction Code"; Code[35])
         {
             Caption = 'Transaction Code';
             DataClassification = ToBeClassified;
