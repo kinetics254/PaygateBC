@@ -92,6 +92,11 @@ page 60601 "PaymentsAPI"
                     ApplicationArea = All;
                     Caption = 'accountNo', Locked = true;
                 }
+                field(providerID; "Provider ID")
+                {
+                    ApplicationArea = All;
+                    Caption = 'providerID', Locked = true;
+                }
             }
         }
     }

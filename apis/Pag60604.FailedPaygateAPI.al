@@ -77,6 +77,11 @@ page 60604 "Failed Paygate API"
                 {
                     Caption = 'createdTime', Locked = true;
                 }
+                field(providerID; "Provider ID")
+                {
+                    ApplicationArea = All;
+                    Caption = 'providerID', Locked = true;
+                }
             }
         }
     }

@@ -2,21 +2,21 @@ codeunit 60653 "Paygate Intergration Manager"
 {
     procedure CreatePaygate(Failed: Boolean; transactionCode: Text[35]; transactionDate: DateTime; payerID: Text[20]; amount: Decimal; description: Text[100];
                             paymentMode: Text[20]; payerNames: Text[100]; sourceDocumentNo: Text[20]; sourceDocumentType: Integer; customerNo: Text[20];
-                            entryNo: Integer; accountNo: Text[20])
+                            entryNo: Integer; accountNo: Text[20]; providerID: Text[20])
     var
         myInt: Integer;
     begin
         if Failed then
             CreateFailedPaygate(transactionCode, transactionDate, payerID, amount, description, paymentMode, payerNames, sourceDocumentNo,
-                                sourceDocumentType, customerNo, entryNo, accountNo)
+                                sourceDocumentType, customerNo, entryNo, accountNo, providerID)
         else
             CreatePaygateEntry(transactionCode, transactionDate, payerID, amount, description, paymentMode, payerNames, sourceDocumentNo,
-                                sourceDocumentType, customerNo, entryNo, accountNo);
+                                sourceDocumentType, customerNo, entryNo, accountNo, providerID);
     end;
 
     local procedure CreateFailedPaygate(transactionCode: Code[35]; transactionDate: DateTime; payerID: Code[20]; amount: Decimal; description: Text[100];
                             paymentMode: Code[20]; payerNames: Text[100]; sourceDocumentNo: Code[20]; sourceDocumentType: Integer; customerNo: Code[20];
-                            entryNo: Integer; accountNo: Code[20])
+                            entryNo: Integer; accountNo: Code[20]; providerID: Code[20])
     var
         Failed: Record "Failed Paygate Buffer";
     begin
@@ -45,12 +45,13 @@ codeunit 60653 "Paygate Intergration Manager"
         end;
         Failed."Customer No." := customerNo;
         Failed."Account No." := accountNo;
+        Failed."Provider ID" := providerID;
         Failed.Insert(true);
     end;
 
     local procedure CreatePaygateEntry(transactionCode: Code[35]; transactionDate: DateTime; payerID: Code[20]; amount: Decimal; description: Text[100];
                             paymentMode: Code[20]; payerNames: Text[100]; sourceDocumentNo: Code[20]; sourceDocumentType: Integer; customerNo: Code[20];
-                            entryNo: Integer; accountNo: Code[20])
+                            entryNo: Integer; accountNo: Code[20]; providerID: Code[20])
     var
         Payment: Record "Paygate Buffer";
     begin
@@ -79,6 +80,7 @@ codeunit 60653 "Paygate Intergration Manager"
         end;
         Payment."Customer No." := customerNo;
         Payment."Account No." := accountNo;
+        Payment."Provider ID" := providerID;
         Payment.Insert(true);
     end;
 }

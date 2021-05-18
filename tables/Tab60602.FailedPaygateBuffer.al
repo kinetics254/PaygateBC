@@ -130,6 +130,11 @@ table 60602 "Failed Paygate Buffer"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(201; "Provider ID"; Code[20])
+        {
+            Caption = 'Provider ID';
+            DataClassification = ToBeClassified;
+        }
     }
     keys
     {

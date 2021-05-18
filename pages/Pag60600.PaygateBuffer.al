@@ -42,6 +42,11 @@ page 60600 "Paygate Buffer"
                     ApplicationArea = All;
                     StyleExpr = RecHasErrors;
                 }
+                field("Provider ID"; "Provider ID")
+                {
+                    ApplicationArea = All;
+                    StyleExpr = RecHasErrors;
+                }
                 field("Transaction Code"; Rec."Transaction Code")
                 {
                     ApplicationArea = All;
