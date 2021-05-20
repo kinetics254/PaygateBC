@@ -81,6 +81,7 @@ codeunit 60653 "Paygate Intergration Manager"
         Payment."Customer No." := customerNo;
         Payment."Account No." := accountNo;
         Payment."Provider ID" := providerID;
+        Payment."Manual Insert" := false;
         Payment.Insert(true);
     end;
 }

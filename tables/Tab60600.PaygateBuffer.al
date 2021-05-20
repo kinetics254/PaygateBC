@@ -56,11 +56,13 @@ table 60600 "Paygate Buffer"
             DataClassification = ToBeClassified;
             OptionMembers = Pending,Valid,Failed,Processed,Partial;
             OptionCaption = 'Pending,Valid,Failed,Processed,Partial';
+            Editable = false;
         }
         field(21; "DateTime Created"; DateTime)
         {
             Caption = 'DateTime Created';
             DataClassification = ToBeClassified;
+            Editable = false;
         }
         field(33; "Source Document Type"; Option)
         {
@@ -76,6 +78,7 @@ table 60600 "Paygate Buffer"
         field(41; "Applied Entry No."; Integer)
         {
             DataClassification = ToBeClassified;
+            Editable = false;
         }
         field(43; "Bulk Payment"; Boolean)
         {
@@ -97,11 +100,13 @@ table 60600 "Paygate Buffer"
         {
             Caption = 'Validated';
             DataClassification = ToBeClassified;
+            Editable = false;
         }
         field(57; "Validated DateTime"; DateTime)
         {
             Caption = 'Validated DateTime';
             DataClassification = ToBeClassified;
+            Editable = false;
         }
 
         field(61; Errors; Integer)
@@ -115,10 +120,12 @@ table 60600 "Paygate Buffer"
         {
             Caption = 'Has Errors';
             DataClassification = ToBeClassified;
+            Editable = false;
         }
         field(68; "Processed Receipt No"; Code[20])
         {
             DataClassification = ToBeClassified;
+            Editable = false;
         }
         field(100; "Amount To Post"; Decimal)
         {
@@ -135,6 +142,7 @@ table 60600 "Paygate Buffer"
                 if "Amount To Post" > (Amount - "Amount Posted") then
                     Error(ExcessAmt, FieldCaption("Amount To Post"), FieldCaption("Amount Posted"));
             end;
+
         }
         field(101; "Amount Posted"; Decimal)
         {
@@ -165,6 +173,22 @@ table 60600 "Paygate Buffer"
             Caption = 'Provider ID';
             DataClassification = ToBeClassified;
         }
+        field(205; "Trans Date"; Date)
+        {
+            Caption = 'Transaction Date';
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(206; "Created Date"; Date)
+        {
+            Caption = 'Created Date';
+            Editable = false;
+        }
+        field(207; "Manual Insert"; Boolean)
+        {
+            InitValue = true;
+            DataClassification = ToBeClassified;
+        }
 
     }
     keys
@@ -186,7 +210,10 @@ table 60600 "Paygate Buffer"
     begin
         if "Entry No." = 0 then
             "Entry No." := GetNextEntryNo();
+        "DateTime Created" := CurrentDateTime;
         "Created Time" := CurrentDateTime;
+        "Trans Date" := DT2Date("Transaction DateTime");
+        "Created Date" := Today;
     end;
 
     local procedure GetNextEntryNo(): Integer

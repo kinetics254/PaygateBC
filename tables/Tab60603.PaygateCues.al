@@ -8,32 +8,43 @@ table 60603 "Paygate Cues"
         field(1; "Primary Key"; Code[10])
         {
             Caption = 'Primary Key';
-            DataClassification = ToBeClassified;
         }
         field(2; "Processed Paygate"; Integer)
         {
             Caption = 'Processed Paygate';
-            DataClassification = ToBeClassified;
         }
         field(3; "Unprocessed Paygate"; Integer)
         {
             Caption = 'Unprocessed Paygate';
-            DataClassification = ToBeClassified;
+
         }
         field(4; "Processed Amount"; Decimal)
         {
             Caption = 'Processed Amount';
-            DataClassification = ToBeClassified;
+            FieldClass = FlowField;
+            CalcFormula = sum("Paygate Buffer".Amount where(Status = filter(Processed), Duplicate = filter(false), "Trans Date" = field("Date Filter")));
+            DecimalPlaces = 0 : 0;
+            AutoFormatType = 10;
+            AutoFormatExpression = GetAmountFormat();
+            Editable = false;
         }
         field(5; "Unprocessed Amount"; Decimal)
         {
             Caption = 'Unprocessed Amount';
-            DataClassification = ToBeClassified;
+            FieldClass = FlowField;
+            CalcFormula = sum("Paygate Buffer".Amount where(Status = filter(Pending), Duplicate = filter(false), "Trans Date" = field("Date Filter")));
+            DecimalPlaces = 0 : 0;
+            AutoFormatType = 10;
+            AutoFormatExpression = GetAmountFormat();
         }
         field(6; "Amount Received Today"; Decimal)
         {
             Caption = 'Amount Received Today';
-            DataClassification = ToBeClassified;
+            FieldClass = FlowField;
+            CalcFormula = sum("Paygate Buffer".Amount where(Duplicate = filter(false), "Created Date" = field("Today Filter")));
+            DecimalPlaces = 0 : 0;
+            AutoFormatType = 10;
+            AutoFormatExpression = GetAmountFormat();
         }
         field(7; "Failed Paygate"; Integer)
         {
@@ -63,5 +74,9 @@ table 60603 "Paygate Cues"
             Clustered = true;
         }
     }
+    local procedure GetAmountFormat(): Text
 
+    begin
+        exit('<Precision,0:0><Standard Format,0>');
+    end;
 }

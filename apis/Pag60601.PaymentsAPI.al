@@ -100,5 +100,8 @@ page 60601 "PaymentsAPI"
             }
         }
     }
-
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        Rec."Manual Insert" := false;
+    end;
 }
