@@ -148,6 +148,12 @@ table 60600 "Paygate Buffer"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(105; Duplicate; Boolean)
+        {
+            Caption = 'Duplicate';
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
         field(200; "Created Time"; DateTime)
         {
             Caption = 'Created Time';
@@ -159,6 +165,7 @@ table 60600 "Paygate Buffer"
             Caption = 'Provider ID';
             DataClassification = ToBeClassified;
         }
+
     }
     keys
     {
