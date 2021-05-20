@@ -153,6 +153,7 @@ table 60602 "Failed Paygate Buffer"
         if "Entry No." = 0 then
             "Entry No." := GetNextEntryNo();
         "Created Time" := CurrentDateTime;
+        "DateTime Created" := CurrentDateTime;
     end;
 
     local procedure GetNextEntryNo(): Integer
