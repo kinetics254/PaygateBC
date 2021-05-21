@@ -9,6 +9,7 @@ table 60600 "Paygate Buffer"
         {
             Caption = 'Entry No.';
             DataClassification = ToBeClassified;
+            Editable = false;
         }
         field(3; "Transaction Code"; Code[35])
         {
