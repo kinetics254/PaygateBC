@@ -16,7 +16,7 @@ table 60601 "Paygate Error Entry"
             Caption = 'Source Entry No.';
             DataClassification = ToBeClassified;
         }
-        field(5; "Source Transaction ID"; Code[20])
+        field(5; "Source Transaction ID"; Code[35])
         {
             Caption = 'Source Transaction ID';
             DataClassification = ToBeClassified;
