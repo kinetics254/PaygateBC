@@ -1,7 +1,7 @@
 page 60604 "Failed Paygate API"
 {
 
-    APIGroup = 'apiGroup';
+    APIGroup = 'PayGate';
     APIPublisher = 'KineticTechnology';
     APIVersion = 'v1.0';
     Caption = 'failedPaygateAPI';
