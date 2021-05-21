@@ -135,6 +135,11 @@ table 60602 "Failed Paygate Buffer"
             Caption = 'Provider ID';
             DataClassification = ToBeClassified;
         }
+        field(206; "Created Date"; Date)
+        {
+            Caption = 'Created Date';
+            Editable = false;
+        }
     }
     keys
     {
@@ -154,6 +159,7 @@ table 60602 "Failed Paygate Buffer"
             "Entry No." := GetNextEntryNo();
         "Created Time" := CurrentDateTime;
         "DateTime Created" := CurrentDateTime;
+        "Created Date" := Today;
     end;
 
     local procedure GetNextEntryNo(): Integer

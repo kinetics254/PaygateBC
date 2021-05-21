@@ -12,15 +12,18 @@ table 60603 "Paygate Cues"
         field(2; "Processed Paygate"; Integer)
         {
             Caption = 'Processed Paygate';
+            FieldClass = FlowField;
+            CalcFormula = count("Paygate Buffer" where(Status = filter(Processed), "Trans Date" = field("Date Filter")));
         }
         field(3; "Unprocessed Paygate"; Integer)
         {
             Caption = 'Unprocessed Paygate';
-
+            FieldClass = FlowField;
+            CalcFormula = count("Paygate Buffer" where(Status = filter(Pending), "Trans Date" = field("Date Filter")));
         }
         field(4; "Processed Amount"; Decimal)
         {
-            Caption = 'Processed Amount';
+            Caption = 'Current Year Processed';
             FieldClass = FlowField;
             CalcFormula = sum("Paygate Buffer".Amount where(Status = filter(Processed), Duplicate = filter(false), "Trans Date" = field("Date Filter")));
             DecimalPlaces = 0 : 0;
@@ -30,7 +33,7 @@ table 60603 "Paygate Cues"
         }
         field(5; "Unprocessed Amount"; Decimal)
         {
-            Caption = 'Unprocessed Amount';
+            Caption = 'Current Year Unprocessed';
             FieldClass = FlowField;
             CalcFormula = sum("Paygate Buffer".Amount where(Status = filter(Pending), Duplicate = filter(false), "Trans Date" = field("Date Filter")));
             DecimalPlaces = 0 : 0;
@@ -39,7 +42,7 @@ table 60603 "Paygate Cues"
         }
         field(6; "Amount Received Today"; Decimal)
         {
-            Caption = 'Amount Received Today';
+            Caption = 'Received Today';
             FieldClass = FlowField;
             CalcFormula = sum("Paygate Buffer".Amount where(Duplicate = filter(false), "Created Date" = field("Today Filter")));
             DecimalPlaces = 0 : 0;
@@ -49,7 +52,36 @@ table 60603 "Paygate Cues"
         field(7; "Failed Paygate"; Integer)
         {
             Caption = 'Failed Paygate';
-            DataClassification = ToBeClassified;
+            FieldClass = FlowField;
+            CalcFormula = count("Failed Paygate Buffer" where("Created Date" = field("Date Filter")));
+        }
+        field(8; "Month Processed Amount"; Decimal)
+        {
+            Caption = 'Current Month Processed';
+            FieldClass = FlowField;
+            CalcFormula = sum("Paygate Buffer".Amount where(Status = filter(Processed), Duplicate = filter(false), "Created Date" = field("Month Filter")));
+            DecimalPlaces = 0 : 0;
+            AutoFormatType = 10;
+            AutoFormatExpression = GetAmountFormat();
+            Editable = false;
+        }
+        field(9; "Month Unprocessed Amount"; Decimal)
+        {
+            Caption = 'Current Month Unprocessed';
+            FieldClass = FlowField;
+            CalcFormula = sum("Paygate Buffer".Amount where(Status = filter(Pending), Duplicate = filter(false), "Created Date" = field("Month Filter")));
+            DecimalPlaces = 0 : 0;
+            AutoFormatType = 10;
+            AutoFormatExpression = GetAmountFormat();
+        }
+        field(10; "CM Amount Received"; Decimal)
+        {
+            Caption = 'Current Month Received';
+            FieldClass = FlowField;
+            CalcFormula = sum("Paygate Buffer".Amount where(Duplicate = filter(false), "Created Date" = field("Month Filter")));
+            DecimalPlaces = 0 : 0;
+            AutoFormatType = 10;
+            AutoFormatExpression = GetAmountFormat();
         }
         field(50; "Date Filter"; Date)
         {
@@ -64,6 +96,11 @@ table 60603 "Paygate Cues"
         field(52; "Today Filter"; Date)
         {
             Caption = 'Today Filter';
+            FieldClass = FlowFilter;
+        }
+        field(53; "Month Filter"; Date)
+        {
+            Caption = 'Monthly Filter';
             FieldClass = FlowFilter;
         }
     }
