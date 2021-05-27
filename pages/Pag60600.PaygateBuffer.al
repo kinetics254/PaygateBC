@@ -42,7 +42,7 @@ page 60600 "Paygate Buffer"
                     ApplicationArea = All;
                     StyleExpr = RecHasErrors;
                 }
-                field("Provider ID"; "Provider ID")
+                field("Provider ID"; Rec."Provider ID")
                 {
                     ApplicationArea = All;
                     StyleExpr = RecHasErrors;
@@ -102,7 +102,7 @@ page 60600 "Paygate Buffer"
                 {
                     ApplicationArea = All;
                 }
-                field("Processed Receipt No"; "Processed Receipt No")
+                field("Processed Receipt No"; Rec."Processed Receipt No")
                 {
                     ApplicationArea = Basic, Suite;
                 }
@@ -115,11 +115,16 @@ page 60600 "Paygate Buffer"
                     ApplicationArea = All;
                     StyleExpr = RecHasErrors;
                 }
+                field("Promise to Pay"; Rec."Promise to Pay")
+                {
+                    ApplicationArea = Basic, Suite;
+                    Editable = false;
+                }
                 field("Created Time"; Rec."Created Time")
                 {
                     ApplicationArea = Basic, Suite;
                 }
-                field("Manual Insert"; "Manual Insert")
+                field("Manual Insert"; Rec."Manual Insert")
                 {
                     ApplicationArea = Basic, Suite;
                 }

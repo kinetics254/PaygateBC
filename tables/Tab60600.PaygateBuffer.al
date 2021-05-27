@@ -163,6 +163,16 @@ table 60600 "Paygate Buffer"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(110; "Promise to Pay"; Boolean)
+        {
+            Caption = 'Promise to Pay';
+            DataClassification = ToBeClassified;
+        }
+        field(111; Attachment; Media)
+        {
+            Caption = 'Attachment';
+            DataClassification = ToBeClassified;
+        }
         field(200; "Created Time"; DateTime)
         {
             Caption = 'Created Time';

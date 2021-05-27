@@ -36,6 +36,13 @@ page 60602 "Paygate Fact Box"
                     StyleExpr = 'Attention';
                 }
             }
+            group(Attachment)
+            {
+                field(PromiseToPay; Rec.Attachment)
+                {
+                    ApplicationArea = Basic, Suite;
+                }
+            }
         }
     }
 
