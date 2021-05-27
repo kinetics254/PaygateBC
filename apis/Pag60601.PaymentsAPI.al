@@ -97,6 +97,11 @@ page 60601 "PaymentsAPI"
                     ApplicationArea = All;
                     Caption = 'providerID', Locked = true;
                 }
+                field(promiseToPay; "Promise to Pay")
+                {
+                    ApplicationArea = All;
+                    Caption = 'promiseToPay', Locked = true;
+                }
                 field(base64Attachment; base64Attachment)
                 {
                     ApplicationArea = All;
