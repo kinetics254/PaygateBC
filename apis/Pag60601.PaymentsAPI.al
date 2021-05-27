@@ -97,6 +97,15 @@ page 60601 "PaymentsAPI"
                     ApplicationArea = All;
                     Caption = 'providerID', Locked = true;
                 }
+                field(base64Attachment; base64Attachment)
+                {
+                    ApplicationArea = All;
+                    Caption = 'base64Attachment';
+                    trigger OnValidate()
+                    begin
+                        processAttachment();
+                    end;
+                }
             }
         }
     }
@@ -104,4 +113,25 @@ page 60601 "PaymentsAPI"
     begin
         Rec."Manual Insert" := false;
     end;
+
+    local procedure processAttachment()
+
+    begin
+        if base64Attachment = '' then
+            exit;
+        Clear(Outstream);
+        Clear(Instream);
+        Clear(TempBlob);
+        TempBlob.CreateOutStream(Outstream);
+        Base64Mgt.FromBase64(base64Attachment, Outstream);
+        TempBlob.CreateInStream(Instream);
+        Rec.Attachment.ImportStream(Instream, 'Photo');
+    end;
+
+    var
+        base64Attachment: Text;
+        Outstream: OutStream;
+        Instream: InStream;
+        TempBlob: Codeunit "Temp Blob";
+        Base64Mgt: Codeunit "Base64 Convert";
 }

@@ -2,21 +2,20 @@ codeunit 60653 "Paygate Intergration Manager"
 {
     procedure CreatePaygate(Failed: Boolean; transactionCode: Text[35]; transactionDate: DateTime; payerID: Text[20]; amount: Decimal; description: Text[100];
                             paymentMode: Text[20]; payerNames: Text[100]; sourceDocumentNo: Text[20]; sourceDocumentType: Integer; customerNo: Text[20];
-                            entryNo: Integer; accountNo: Text[20]; providerID: Text[20])
-    var
-        myInt: Integer;
+                            entryNo: Integer; accountNo: Text[20]; providerID: Text[20]; promiseToPay: Boolean; base64Attachment: Text)
     begin
         if Failed then
             CreateFailedPaygate(transactionCode, transactionDate, payerID, amount, description, paymentMode, payerNames, sourceDocumentNo,
                                 sourceDocumentType, customerNo, entryNo, accountNo, providerID)
         else
             CreatePaygateEntry(transactionCode, transactionDate, payerID, amount, description, paymentMode, payerNames, sourceDocumentNo,
-                                sourceDocumentType, customerNo, entryNo, accountNo, providerID);
+                                sourceDocumentType, customerNo, entryNo, accountNo, providerID, promiseToPay, base64Attachment);
     end;
 
-    local procedure CreateFailedPaygate(transactionCode: Code[35]; transactionDate: DateTime; payerID: Code[20]; amount: Decimal; description: Text[100];
-                            paymentMode: Code[20]; payerNames: Text[100]; sourceDocumentNo: Code[20]; sourceDocumentType: Integer; customerNo: Code[20];
-                            entryNo: Integer; accountNo: Code[20]; providerID: Code[20])
+    local procedure CreateFailedPaygate(transactionCode: Code[35]; transactionDate: DateTime; payerID: Code[20]; amount: Decimal;
+                                        description: Text[100]; paymentMode: Code[20]; payerNames: Text[100];
+                                        sourceDocumentNo: Code[20]; sourceDocumentType: Integer; customerNo: Code[20];
+                                        entryNo: Integer; accountNo: Code[20]; providerID: Code[20])
     var
         Failed: Record "Failed Paygate Buffer";
     begin
@@ -49,11 +48,17 @@ codeunit 60653 "Paygate Intergration Manager"
         Failed.Insert(true);
     end;
 
-    local procedure CreatePaygateEntry(transactionCode: Code[35]; transactionDate: DateTime; payerID: Code[20]; amount: Decimal; description: Text[100];
-                            paymentMode: Code[20]; payerNames: Text[100]; sourceDocumentNo: Code[20]; sourceDocumentType: Integer; customerNo: Code[20];
-                            entryNo: Integer; accountNo: Code[20]; providerID: Code[20])
+    local procedure CreatePaygateEntry(transactionCode: Code[35]; transactionDate: DateTime; payerID: Code[20]; amount: Decimal;
+                                        description: Text[100]; paymentMode: Code[20]; payerNames: Text[100];
+                                        sourceDocumentNo: Code[20]; sourceDocumentType: Integer; customerNo: Code[20];
+                                        entryNo: Integer; accountNo: Code[20]; providerID: Code[20]; promiseToPay: Boolean;
+                                        base64Attachment: Text)
     var
         Payment: Record "Paygate Buffer";
+        Outstream: OutStream;
+        Instream: InStream;
+        TempBlob: Codeunit "Temp Blob";
+        Base64Mgt: Codeunit "Base64 Convert";
     begin
         Payment."Entry No." := entryNo;
         Payment."Transaction Code" := transactionCode;
@@ -78,10 +83,20 @@ codeunit 60653 "Paygate Intergration Manager"
             5:
                 Payment."Source Document Type" := Payment."Source Document Type"::Requests;
         end;
+        Payment."Promise to Pay" := promiseToPay;
         Payment."Customer No." := customerNo;
         Payment."Account No." := accountNo;
         Payment."Provider ID" := providerID;
         Payment."Manual Insert" := false;
+        if not (base64Attachment = '') then begin
+            Clear(Outstream);
+            Clear(Instream);
+            Clear(TempBlob);
+            TempBlob.CreateOutStream(Outstream);
+            Base64Mgt.FromBase64(base64Attachment, Outstream);
+            TempBlob.CreateInStream(Instream);
+            Payment.Attachment.ImportStream(Instream, 'Photo');
+        end;
         Payment.Insert(true);
     end;
 }
