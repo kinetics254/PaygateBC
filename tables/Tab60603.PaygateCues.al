@@ -112,8 +112,12 @@ table 60603 "Paygate Cues"
         }
     }
     local procedure GetAmountFormat(): Text
-
+    var
+        GLSetup: Record "General Ledger Setup";
+        CurrencySymbol: Text;
     begin
-        exit('<Precision,0:0><Standard Format,0>');
+        GLSetup.Get();
+        CurrencySymbol := GLSetup.GetCurrencySymbol();
+        exit(StrSubstNo('%1<Precision,0:0><Standard Format,0>', CurrencySymbol));
     end;
 }
