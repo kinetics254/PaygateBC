@@ -128,6 +128,22 @@ page 60600 "Paygate Buffer"
                 {
                     ApplicationArea = Basic, Suite;
                 }
+                field("Credit Payment"; "Credit Payment")
+                {
+                    ApplicationArea = Basic, Suite;
+                }
+                field("Credit Reference No"; "Credit Reference No")
+                {
+                    ApplicationArea = Basic, Suite;
+                }
+                field("Is Overpayment Application"; "Is Overpayment Application")
+                {
+                    ApplicationArea = Basic, Suite;
+                }
+                field("Overpayment Application No"; "Overpayment Application No")
+                {
+                    ApplicationArea = Basic, Suite;
+                }
             }
         }
         area(FactBoxes)

@@ -2,14 +2,16 @@ codeunit 60653 "Paygate Intergration Manager"
 {
     procedure CreatePaygate(Failed: Boolean; transactionCode: Text[35]; transactionDate: DateTime; payerID: Text[20]; amount: Decimal; description: Text[100];
                             paymentMode: Text[20]; payerNames: Text[100]; sourceDocumentNo: Text[20]; sourceDocumentType: Integer; customerNo: Text[20];
-                            entryNo: Integer; accountNo: Text[20]; providerID: Text[20]; promiseToPay: Boolean; base64Attachment: Text)
+                            entryNo: Integer; accountNo: Text[20]; providerID: Text[20]; promiseToPay: Boolean; base64Attachment: Text;
+                            isCreditPayment: Boolean; creditReferenceNo: Code[35]; isOverpaymentApplication: Boolean; overpaymentApplicationNo: Code[20])
     begin
         if Failed then
             CreateFailedPaygate(transactionCode, transactionDate, payerID, amount, description, paymentMode, payerNames, sourceDocumentNo,
                                 sourceDocumentType, customerNo, entryNo, accountNo, providerID)
         else
             CreatePaygateEntry(transactionCode, transactionDate, payerID, amount, description, paymentMode, payerNames, sourceDocumentNo,
-                                sourceDocumentType, customerNo, entryNo, accountNo, providerID, promiseToPay, base64Attachment);
+                                sourceDocumentType, customerNo, entryNo, accountNo, providerID, promiseToPay, base64Attachment,
+                                isCreditPayment, creditReferenceNo, isOverpaymentApplication, overpaymentApplicationNo);
     end;
 
     local procedure CreateFailedPaygate(transactionCode: Code[35]; transactionDate: DateTime; payerID: Code[20]; amount: Decimal;
@@ -52,7 +54,8 @@ codeunit 60653 "Paygate Intergration Manager"
                                         description: Text[100]; paymentMode: Code[20]; payerNames: Text[100];
                                         sourceDocumentNo: Code[20]; sourceDocumentType: Integer; customerNo: Code[20];
                                         entryNo: Integer; accountNo: Code[20]; providerID: Code[20]; promiseToPay: Boolean;
-                                        base64Attachment: Text)
+                                        base64Attachment: Text; isCreditPayment: Boolean; creditReferenceNo: Code[35];
+                                        isOverpaymentApplication: Boolean; overpaymentApplicationNo: Code[20])
     var
         Payment: Record "Paygate Buffer";
         Outstream: OutStream;
@@ -97,6 +100,10 @@ codeunit 60653 "Paygate Intergration Manager"
             TempBlob.CreateInStream(Instream);
             Payment.Attachment.ImportStream(Instream, 'Photo');
         end;
+        Payment."Is Overpayment Application" := isOverpaymentApplication;
+        Payment."Credit Payment" := isCreditPayment;
+        Payment."Credit Reference No" := creditReferenceNo;
+        Payment."Overpayment Application No" := overpaymentApplicationNo;
         Payment.Insert(true);
     end;
 }

@@ -173,6 +173,26 @@ table 60600 "Paygate Buffer"
             Caption = 'Attachment';
             DataClassification = ToBeClassified;
         }
+        field(112; "Credit Payment"; Boolean)
+        {
+            Caption = 'Credit Payment';
+            DataClassification = ToBeClassified;
+        }
+        field(113; "Credit Reference No"; Code[35])
+        {
+            Caption = 'Credit Payment';
+            DataClassification = ToBeClassified;
+        }
+        field(114; "Is Overpayment Application"; Boolean)
+        {
+            Caption = 'Credit Payment';
+            DataClassification = ToBeClassified;
+        }
+        field(115; "Overpayment Application No"; Code[20])
+        {
+            Caption = 'Credit Payment';
+            DataClassification = ToBeClassified;
+        }
         field(200; "Created Time"; DateTime)
         {
             Caption = 'Created Time';

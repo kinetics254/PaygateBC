@@ -102,6 +102,26 @@ page 60601 "PaymentsAPI"
                     ApplicationArea = All;
                     Caption = 'promiseToPay', Locked = true;
                 }
+                field(isCreditPayment; Rec."Credit Payment")
+                {
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'isCreditPayment', Locked = true;
+                }
+                field(creditReferenceNo; "Credit Reference No")
+                {
+                    ApplicationArea = All;
+                    Caption = 'creditReferenceNo', Locked = true;
+                }
+                field(isOverpaymentApplication; "Is Overpayment Application")
+                {
+                    ApplicationArea = All;
+                    Caption = 'isOverpaymentApplication', Locked = true;
+                }
+                field(overpaymentApplicationNo; "Overpayment Application No")
+                {
+                    ApplicationArea = All;
+                    Caption = 'overpaymentApplicationNo', Locked = true;
+                }
                 field(base64Attachment; base64Attachment)
                 {
                     ApplicationArea = All;
