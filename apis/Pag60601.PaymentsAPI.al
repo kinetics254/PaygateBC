@@ -122,6 +122,11 @@ page 60601 "PaymentsAPI"
                     ApplicationArea = All;
                     Caption = 'overpaymentApplicationNo', Locked = true;
                 }
+                field(currencyCode; "Currency Code")
+                {
+                    Caption = 'currencyCode', Locked = true;
+                    ApplicationArea = All;
+                }
                 field(base64Attachment; base64Attachment)
                 {
                     ApplicationArea = All;

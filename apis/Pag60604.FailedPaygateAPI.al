@@ -82,6 +82,11 @@ page 60604 "Failed Paygate API"
                     ApplicationArea = All;
                     Caption = 'providerID', Locked = true;
                 }
+                field(currencyCode; "Currency Code")
+                {
+                    Caption = 'currencyCode', Locked = true;
+                    ApplicationArea = All;
+                }
             }
         }
     }

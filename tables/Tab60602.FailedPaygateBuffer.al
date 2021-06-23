@@ -15,6 +15,12 @@ table 60602 "Failed Paygate Buffer"
             Caption = 'Transaction Code';
             DataClassification = ToBeClassified;
         }
+        field(4; "Currency Code"; Code[20])
+        {
+            Caption = 'Currency Code';
+            DataClassification = ToBeClassified;
+            TableRelation = Currency.Code;
+        }
         field(5; "Payment Mode"; Code[20])
         {
             Caption = 'Payment Mode';
