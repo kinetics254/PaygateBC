@@ -144,6 +144,10 @@ page 60600 "Paygate Buffer"
                 {
                     ApplicationArea = Basic, Suite;
                 }
+                field("Currency Code"; Rec."Currency Code")
+                {
+                    ApplicationArea = Basic, Suite;
+                }
             }
         }
         area(FactBoxes)

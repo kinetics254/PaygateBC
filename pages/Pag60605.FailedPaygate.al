@@ -90,6 +90,10 @@ page 60605 "Failed Paygate"
                     ToolTip = 'Specifies the value of the Customer No. field';
                     ApplicationArea = Basic, Suite;
                 }
+                field("Currency Code"; Rec."Currency Code")
+                {
+                    ApplicationArea = Basic, Suite;
+                }
             }
         }
     }
