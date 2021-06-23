@@ -21,6 +21,12 @@ table 60600 "Paygate Buffer"
             Caption = 'Payment Mode';
             DataClassification = ToBeClassified;
         }
+        field(4; "Currency Code"; Code[20])
+        {
+            Caption = 'Currency Code';
+            DataClassification = ToBeClassified;
+            TableRelation = Currency.Code;
+        }
         field(7; "Transaction DateTime"; DateTime)
         {
             Caption = 'Transaction DateTime';
